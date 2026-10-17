@@ -1,0 +1,31 @@
+{
+	"$schema": "https://developers.cloudflare.com/workers/wrangler/configuration-schema.json",
+	"name": "agent-git",
+	"main": "src/index.ts",
+	"compatibility_date": "2026-10-10",
+	"workers_dev": true,
+
+	"ai": {
+		"binding": "AI"
+	},
+
+	"vars": {
+		// Swap models freely — nothing here is vendor-locked.
+		"DEFAULT_MODEL": "@cf/meta/llama-3.3-70b-instruct-fp8-fast",
+		"ARTIFACTS_ACCOUNT_ID": "c7f88a7ef7b56be7ed84d4d0b09c8319"
+	}
+
+	// Cloudflare Artifacts (real integration — see "Artifacts setup" in README.md):
+	//   ARTIFACTS_ACCOUNT_ID  — wrangler var (Cloudflare account id)
+	//   ARTIFACTS_API_TOKEN   — set via: npx wrangler secret put ARTIFACTS_API_TOKEN
+	//   ARTIFACTS_NAMESPACE   — optional wrangler var; defaults to "agentgit"
+	// Until account id + token are set, the Worker uses the zero-setup MemoryStore.
+
+	// Later upgrades, when you want them:
+	//   "kv_namespaces": [{ "binding": "REPOS", "id": "<kv-id>" }]
+	//     → back RepoStore with KV so branches survive isolates/restarts
+	//   "r2_buckets": [{ "binding": "SNAPSHOTS", "bucket_name": "agent-git-snaps" }]
+	//     → store full repo snapshots per merge for audit/rollback
+	//   "queues": { "producers": [{ "binding": "MERGES", "queue": "agent-git-merges" }] }
+	//     → move long coordinator merges off the HTTP request
+}

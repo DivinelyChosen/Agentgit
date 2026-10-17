@@ -1,0 +1,1 @@
+{"compilerOptions":{"module":"ESNext","moduleResolution":"Bundler","skipLibCheck":true,"strict":true,"target":"ES2022","types":["@cloudflare/workers-types"]},"include":["src/**/*"]}
